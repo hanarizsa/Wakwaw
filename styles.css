@@ -1005,6 +1005,34 @@ body {
     opacity: 1;
 }
 
+/* Optimasi gambar otomatis */
+.gallery-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+    /* Browser akan otomatis resize */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+}
+
+/* Loading state */
+.gallery-item img[loading="lazy"] {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
 /* Coupons */
 .coupons-grid {
     display: grid;
