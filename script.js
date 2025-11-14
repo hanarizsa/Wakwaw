@@ -834,6 +834,10 @@ function initializeTriviaQuiz() {
 function showTriviaQuestion() {
     const content = document.getElementById('triviaContent');
     const question = triviaQuestions[currentQuestion];
+
+    // ✅ TAMBAHKAN INI - Force clear semua styling sebelumnya
+    content.className = ''; // Clear all classes
+    content.style = ''; // Clear all inline styles
     
     content.innerHTML = `
         <div class="quiz-progress" style="text-align: center; margin-bottom: 20px; color: #7f8c8d;">
@@ -870,7 +874,15 @@ function selectTriviaAnswer(selectedIndex) {
     setTimeout(() => {
         currentQuestion++;
         if (currentQuestion < triviaQuestions.length) {
-            showTriviaQuestion();
+            // ✅ TAMBAHKAN fade out effect dulu
+            const content = document.getElementById('triviaContent');
+            content.style.opacity = '0';
+            content.style.transition = 'opacity 0.2s ease';
+            
+            setTimeout(() => {
+                showTriviaQuestion();
+                content.style.opacity = '1';
+            }, 200); // Delay 200ms untuk clear styling
         } else {
             showTriviaResults();
         }
