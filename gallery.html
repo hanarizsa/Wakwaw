@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Memories 💕</title>
+    <title>Our Memories in the Stars 💫</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Quicksand:wght@400;600&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -12,200 +14,225 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(-45deg, #ffeef8, #ffe6f0, #fff0f5, #ffc6d9);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            min-height: 100vh;
+            font-family: 'Quicksand', sans-serif;
             overflow-x: hidden;
+            position: relative;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Floating particles */
-        .particles {
+        /* Galaxy Background Container */
+        #galaxyCanvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
             z-index: 1;
-            overflow: hidden;
         }
 
-        .particle {
-            position: absolute;
-            font-size: 1.5rem;
-            animation: float-up 15s infinite;
-            opacity: 0;
+        /* Overlay untuk dim galaxy agar text lebih terbaca */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            pointer-events: none;
         }
 
-        @keyframes float-up {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Header */
-        .header {
+        /* Content container */
+        .content {
             position: relative;
             z-index: 10;
-            text-align: center;
-            padding: 60px 20px 40px;
         }
 
-        .header h1 {
-            font-size: 3rem;
-            color: #ff6b9d;
-            text-shadow: 2px 2px 10px rgba(255, 107, 157, 0.3);
-            margin-bottom: 10px;
-            animation: fadeInDown 1s ease;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            color: #c44569;
-            font-style: italic;
-            animation: fadeInDown 1s ease 0.2s backwards;
-        }
-
+        /* Back Button */
         .back-btn {
             position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 12px 25px;
-            background: white;
-            color: #ff6b9d;
-            border: 2px solid #ff6b9d;
+            top: 25px;
+            left: 25px;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
             border-radius: 50px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             z-index: 100;
             transition: all 0.3s ease;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .back-btn:hover {
-            background: #ff6b9d;
-            color: white;
+            background: rgba(255, 255, 255, 0.25);
             transform: translateX(-5px);
+            box-shadow: 0 12px 40px rgba(255, 107, 157, 0.4);
         }
 
-        /* Gallery Container */
-        .gallery-container {
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 80px 20px 60px;
             position: relative;
-            z-index: 10;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #ffc6d9 50%, #fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 198, 217, 0.5);
+            margin-bottom: 15px;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 198, 217, 0.6)); }
+            50% { filter: drop-shadow(0 0 20px rgba(255, 198, 217, 0.9)); }
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-style: italic;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Gallery Grid */
+        .gallery-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 40px 20px 100px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 50px;
             align-items: start;
         }
 
-        /* Polaroid Card */
+        /* Polaroid Card with Glass Morphism */
         .polaroid {
-            background: white;
-            padding: 15px;
-            padding-bottom: 60px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            padding-bottom: 70px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
             transform: rotate(0deg);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
             opacity: 0;
-            animation: fadeInUp 0.6s ease forwards;
+            animation: fadeInUp 0.8s ease forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Shimmer effect on hover */
+        .polaroid::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .polaroid:hover::before {
+            opacity: 1;
+            left: 100%;
         }
 
         .polaroid:nth-child(odd) {
-            transform: rotate(-2deg);
+            transform: rotate(-3deg);
         }
 
         .polaroid:nth-child(even) {
-            transform: rotate(2deg);
+            transform: rotate(3deg);
         }
 
         .polaroid:hover {
-            transform: rotate(0deg) scale(1.05) translateY(-10px);
-            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.4);
-            z-index: 20;
+            transform: rotate(0deg) scale(1.08) translateY(-15px);
+            box-shadow: 0 25px 70px rgba(255, 107, 157, 0.5),
+                        0 0 40px rgba(255, 198, 217, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 198, 217, 0.5);
+        }
+
+        /* Image container with loading effect */
+        .polaroid-img-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            overflow: hidden;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .polaroid img {
             width: 100%;
-            height: 350px;
+            height: 100%;
             object-fit: cover;
             display: block;
-            border-radius: 2px;
-            filter: brightness(1.05) contrast(1.1);
-            transition: filter 0.3s ease;
+            filter: brightness(0.95) contrast(1.1);
+            transition: all 0.4s ease;
         }
 
         .polaroid:hover img {
-            filter: brightness(1.1) contrast(1.15);
+            filter: brightness(1.05) contrast(1.15);
+            transform: scale(1.05);
         }
 
-        .polaroid-caption {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 1rem;
-            color: #555;
-            font-family: 'Comic Sans MS', cursive;
-            font-weight: bold;
-        }
-
-        /* Loading placeholder */
+        /* Loading shimmer */
         .polaroid img[data-src] {
-            filter: blur(10px);
-            transition: filter 0.5s ease;
+            filter: blur(20px) brightness(0.8);
         }
 
         .polaroid img.loaded {
-            filter: blur(0) brightness(1.05) contrast(1.1);
+            filter: blur(0) brightness(0.95) contrast(1.1);
+        }
+
+        .polaroid-caption {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+            letter-spacing: 0.5px;
         }
 
         /* Animations */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(50px);
+                transform: translateY(60px) scale(0.9);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
-        /* Stagger animation delays */
+        /* Stagger delays */
         .polaroid:nth-child(1) { animation-delay: 0.1s; }
         .polaroid:nth-child(2) { animation-delay: 0.2s; }
         .polaroid:nth-child(3) { animation-delay: 0.3s; }
@@ -223,65 +250,126 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s ease;
         }
 
         .modal.active {
             display: flex;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .modal img {
             max-width: 90%;
-            max-height: 90%;
+            max-height: 90vh;
             object-fit: contain;
-            border-radius: 10px;
-            box-shadow: 0 20px 80px rgba(255, 107, 157, 0.5);
+            border-radius: 15px;
+            box-shadow: 0 30px 100px rgba(255, 107, 157, 0.5);
+            animation: zoomIn 0.4s ease;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .modal-close {
             position: absolute;
             top: 30px;
             right: 40px;
-            font-size: 3rem;
+            font-size: 3.5rem;
             color: white;
             cursor: pointer;
             z-index: 1001;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.8);
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg) scale(1.2);
+            color: #ff6b9d;
+        }
+
+        /* Floating hearts decoration */
+        .heart-decoration {
+            position: fixed;
+            font-size: 2rem;
+            animation: floatHeart 12s infinite;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .header h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
-            
+
+            .header p {
+                font-size: 1rem;
+            }
+
             .gallery-container {
                 grid-template-columns: 1fr;
-                gap: 30px;
+                gap: 40px;
+                padding: 30px 15px 80px;
             }
-            
-            .polaroid img {
-                height: 300px;
+
+            .polaroid-img-container {
+                height: 320px;
+            }
+
+            .back-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Floating Particles -->
-    <div class="particles" id="particles"></div>
+    <!-- Galaxy Background Canvas -->
+    <div id="galaxyCanvas"></div>
+    
+    <!-- Overlay untuk dim galaxy -->
+    <div class="overlay"></div>
 
-    <!-- Back Button -->
-    <a href="index.html" class="back-btn">← Back to Home</a>
+    <!-- Content -->
+    <div class="content">
+        <!-- Back Button -->
+        <a href="index.html" class="back-btn">
+            <span>←</span> Back to Home
+        </a>
 
-    <!-- Header -->
-    <div class="header">
-        <h1>💕 Our Beautiful Memories 💕</h1>
-        <p>Every moment with you is a treasure</p>
-    </div>
+        <!-- Header -->
+        <div class="header">
+            <h1>💫 Our Love Written in the Stars 💫</h1>
+            <p>Every moment with you shines brighter than the galaxy</p>
+        </div>
 
-    <!-- Gallery -->
-    <div class="gallery-container" id="gallery">
-        <!-- Photos will be inserted here by JavaScript -->
+        <!-- Gallery -->
+        <div class="gallery-container" id="gallery">
+            <!-- Photos will be inserted here -->
+        </div>
     </div>
 
     <!-- Fullscreen Modal -->
@@ -290,8 +378,136 @@
         <img id="modalImage" src="" alt="">
     </div>
 
+    <!-- Three.js Galaxy Background -->
+    <script type="module">
+        import * as THREE from "https://cdn.skypack.dev/three@0.136.0";
+        import {OrbitControls} from "https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls";
+
+        // Setup Three.js Scene
+        let scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0015); // Darker for better contrast
+        
+        let camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.set(0, 4, 21);
+        
+        let renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.getElementById('galaxyCanvas').appendChild(renderer.domElement);
+
+        // Responsive resize
+        window.addEventListener("resize", () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        let controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.enablePan = false;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+
+        let gu = { time: {value: 0} };
+
+        // Create particles
+        let sizes = [];
+        let shift = [];
+        let pushShift = () => {
+            shift.push(
+                Math.random() * Math.PI,
+                Math.random() * Math.PI * 2,
+                (Math.random() * 0.9 + 0.1) * Math.PI * 0.1,
+                Math.random() * 0.9 + 0.1
+            );
+        };
+
+        let pts = new Array(30000).fill().map(p => {
+            sizes.push(Math.random() * 1.5 + 0.5);
+            pushShift();
+            return new THREE.Vector3().randomDirection().multiplyScalar(Math.random() * 0.5 + 9.5);
+        });
+
+        for(let i = 0; i < 70000; i++){
+            let r = 10, R = 40;
+            let rand = Math.pow(Math.random(), 1.5);
+            let radius = Math.sqrt(R * R * rand + (1 - rand) * r * r);
+            pts.push(new THREE.Vector3().setFromCylindricalCoords(radius, Math.random() * 2 * Math.PI, (Math.random() - 0.5) * 2));
+            sizes.push(Math.random() * 1.5 + 0.5);
+            pushShift();
+        }
+
+        let g = new THREE.BufferGeometry().setFromPoints(pts);
+        g.setAttribute("sizes", new THREE.Float32BufferAttribute(sizes, 1));
+        g.setAttribute("shift", new THREE.Float32BufferAttribute(shift, 4));
+        
+        let m = new THREE.PointsMaterial({
+            size: 0.125,
+            transparent: true,
+            depthTest: false,
+            blending: THREE.AdditiveBlending,
+            onBeforeCompile: shader => {
+                shader.uniforms.time = gu.time;
+                shader.vertexShader = `
+                    uniform float time;
+                    attribute float sizes;
+                    attribute vec4 shift;
+                    varying vec3 vColor;
+                    ${shader.vertexShader}
+                `.replace(
+                    `gl_PointSize = size;`,
+                    `gl_PointSize = size * sizes;`
+                ).replace(
+                    `#include <color_vertex>`,
+                    `#include <color_vertex>
+                        float d = length(abs(position) / vec3(40., 10., 40));
+                        d = clamp(d, 0., 1.);
+                        vColor = mix(vec3(255., 107., 157.), vec3(196., 69., 105.), d) / 255.;
+                    `
+                ).replace(
+                    `#include <begin_vertex>`,
+                    `#include <begin_vertex>
+                        float t = time;
+                        float moveT = mod(shift.x + shift.z * t, PI2);
+                        float moveS = mod(shift.y + shift.z * t, PI2);
+                        transformed += vec3(cos(moveS) * sin(moveT), cos(moveT), sin(moveS) * sin(moveT)) * shift.a;
+                    `
+                );
+                shader.fragmentShader = `
+                    varying vec3 vColor;
+                    ${shader.fragmentShader}
+                `.replace(
+                    `#include <clipping_planes_fragment>`,
+                    `#include <clipping_planes_fragment>
+                        float d = length(gl_PointCoord.xy - 0.5);
+                    `
+                ).replace(
+                    `vec4 diffuseColor = vec4( diffuse, opacity );`,
+                    `vec4 diffuseColor = vec4( vColor, smoothstep(0.5, 0.1, d));`
+                );
+            }
+        });
+
+        let p = new THREE.Points(g, m);
+        p.rotation.order = "ZYX";
+        p.rotation.z = 0.2;
+        scene.add(p);
+
+        let clock = new THREE.Clock();
+
+        // Animation loop
+        renderer.setAnimationLoop(() => {
+            controls.update();
+            let t = clock.getElapsedTime() * 0.3;
+            gu.time.value = t * Math.PI;
+            p.rotation.y = t * 0.05;
+            renderer.render(scene, camera);
+        });
+    </script>
+
+    <!-- Gallery Script -->
     <script>
-        // Photo data - GANTI SESUAI FOTO KAMU!
+        // Photo data
         const photos = [
             { src: 'images/IMG_5916.jpg', caption: 'Our first moment together 💕' },
             { src: 'images/IMG_6106.jpg', caption: 'You always make me smile 😊' },
@@ -301,24 +517,19 @@
             { src: 'images/IMG_9657.jpg', caption: 'My happy place is with you 🏡' }
         ];
 
-        // Create floating particles
-        function createParticles() {
-            const particles = document.getElementById('particles');
-            const symbols = ['💕', '💖', '💗', '✨', '⭐', '💝', '🌸', '🌺'];
-            
+        // Create floating hearts
+        function createFloatingHearts() {
+            const hearts = ['💕', '💖', '✨', '💫'];
             setInterval(() => {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.fontSize = (Math.random() * 1 + 1) + 'rem';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                particle.style.animationDelay = Math.random() * 2 + 's';
-                
-                particles.appendChild(particle);
-                
-                setTimeout(() => particle.remove(), 20000);
-            }, 800);
+                const heart = document.createElement('div');
+                heart.className = 'heart-decoration';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 8 + 10) + 's';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 20000);
+            }, 2000);
         }
 
         // Create gallery
@@ -330,9 +541,11 @@
                 polaroid.className = 'polaroid';
                 
                 polaroid.innerHTML = `
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 350'%3E%3Crect fill='%23f0f0f0' width='400' height='350'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23ccc' font-size='20'%3ELoading...%3C/text%3E%3C/svg%3E" 
-                         data-src="${photo.src}" 
-                         alt="${photo.caption}">
+                    <div class="polaroid-img-container">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 380'%3E%3Crect fill='%23222' width='400' height='380'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23666' font-size='18'%3ELoading...%3C/text%3E%3C/svg%3E" 
+                             data-src="${photo.src}" 
+                             alt="${photo.caption}">
+                    </div>
                     <div class="polaroid-caption">${photo.caption}</div>
                 `;
                 
@@ -347,7 +560,6 @@
                 });
             });
             
-            // Lazy load images
             lazyLoadImages();
         }
 
@@ -362,9 +574,7 @@
                         imageObserver.unobserve(img);
                     }
                 });
-            }, {
-                rootMargin: '100px'
-            });
+            }, { rootMargin: '100px' });
             
             document.querySelectorAll('img[data-src]').forEach(img => {
                 imageObserver.observe(img);
@@ -383,7 +593,7 @@
         });
 
         // Initialize
-        createParticles();
+        createFloatingHearts();
         createGallery();
     </script>
 </body>
