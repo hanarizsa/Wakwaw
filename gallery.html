@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Memories 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(-45deg, #ffeef8, #ffe6f0, #fff0f5, #ffc6d9);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: float-up 15s infinite;
+            opacity: 0;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: #ff6b9d;
+            text-shadow: 2px 2px 10px rgba(255, 107, 157, 0.3);
+            margin-bottom: 10px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #c44569;
+            font-style: italic;
+            animation: fadeInDown 1s ease 0.2s backwards;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 25px;
+            background: white;
+            color: #ff6b9d;
+            border: 2px solid #ff6b9d;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: #ff6b9d;
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        /* Gallery Container */
+        .gallery-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Polaroid Card */
+        .polaroid {
+            background: white;
+            padding: 15px;
+            padding-bottom: 60px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+            transform: rotate(0deg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .polaroid:nth-child(odd) {
+            transform: rotate(-2deg);
+        }
+
+        .polaroid:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05) translateY(-10px);
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.4);
+            z-index: 20;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+            border-radius: 2px;
+            filter: brightness(1.05) contrast(1.1);
+            transition: filter 0.3s ease;
+        }
+
+        .polaroid:hover img {
+            filter: brightness(1.1) contrast(1.15);
+        }
+
+        .polaroid-caption {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1rem;
+            color: #555;
+            font-family: 'Comic Sans MS', cursive;
+            font-weight: bold;
+        }
+
+        /* Loading placeholder */
+        .polaroid img[data-src] {
+            filter: blur(10px);
+            transition: filter 0.5s ease;
+        }
+
+        .polaroid img.loaded {
+            filter: blur(0) brightness(1.05) contrast(1.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stagger animation delays */
+        .polaroid:nth-child(1) { animation-delay: 0.1s; }
+        .polaroid:nth-child(2) { animation-delay: 0.2s; }
+        .polaroid:nth-child(3) { animation-delay: 0.3s; }
+        .polaroid:nth-child(4) { animation-delay: 0.4s; }
+        .polaroid:nth-child(5) { animation-delay: 0.5s; }
+        .polaroid:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Fullscreen Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 20px 80px rgba(255, 107, 157, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 3rem;
+            color: white;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .gallery-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .polaroid img {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Back Button -->
+    <a href="index.html" class="back-btn">← Back to Home</a>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>💕 Our Beautiful Memories 💕</h1>
+        <p>Every moment with you is a treasure</p>
+    </div>
+
+    <!-- Gallery -->
+    <div class="gallery-container" id="gallery">
+        <!-- Photos will be inserted here by JavaScript -->
+    </div>
+
+    <!-- Fullscreen Modal -->
+    <div class="modal" id="modal">
+        <span class="modal-close" id="modalClose">&times;</span>
+        <img id="modalImage" src="" alt="">
+    </div>
+
+    <script>
+        // Photo data - GANTI SESUAI FOTO KAMU!
+        const photos = [
+            { src: 'images/IMG_5916.jpg', caption: 'Our first moment together 💕' },
+            { src: 'images/IMG_6106.jpg', caption: 'You always make me smile 😊' },
+            { src: 'images/IMG_8725.jpg', caption: 'Adventures with you 🌍' },
+            { src: 'images/IMG_9104_2.jpg', caption: 'Forever my favorite 💖' },
+            { src: 'images/IMG_9461.jpg', caption: 'Love in every frame 📸' },
+            { src: 'images/IMG_9657.jpg', caption: 'My happy place is with you 🏡' }
+        ];
+
+        // Create floating particles
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            const symbols = ['💕', '💖', '💗', '✨', '⭐', '💝', '🌸', '🌺'];
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                
+                particles.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 20000);
+            }, 800);
+        }
+
+        // Create gallery
+        function createGallery() {
+            const gallery = document.getElementById('gallery');
+            
+            photos.forEach((photo, index) => {
+                const polaroid = document.createElement('div');
+                polaroid.className = 'polaroid';
+                
+                polaroid.innerHTML = `
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 350'%3E%3Crect fill='%23f0f0f0' width='400' height='350'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23ccc' font-size='20'%3ELoading...%3C/text%3E%3C/svg%3E" 
+                         data-src="${photo.src}" 
+                         alt="${photo.caption}">
+                    <div class="polaroid-caption">${photo.caption}</div>
+                `;
+                
+                gallery.appendChild(polaroid);
+                
+                // Click to fullscreen
+                polaroid.addEventListener('click', () => {
+                    const modal = document.getElementById('modal');
+                    const modalImage = document.getElementById('modalImage');
+                    modalImage.src = photo.src;
+                    modal.classList.add('active');
+                });
+            });
+            
+            // Lazy load images
+            lazyLoadImages();
+        }
+
+        // Lazy loading
+        function lazyLoadImages() {
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.add('loaded');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            }, {
+                rootMargin: '100px'
+            });
+            
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Close modal
+        document.getElementById('modalClose').addEventListener('click', () => {
+            document.getElementById('modal').classList.remove('active');
+        });
+
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                document.getElementById('modal').classList.remove('active');
+            }
+        });
+
+        // Initialize
+        createParticles();
+        createGallery();
+    </script>
+</body>
+</html>
